@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -10,7 +9,7 @@ const styles = {
   position: 'absolute'
 };
 
-const Map = ({ mapStyle, children }) => {
+const Map = ({ mapStyle, children }, ref) => {
   const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
 
@@ -27,11 +26,15 @@ const Map = ({ mapStyle, children }) => {
       map.on('load', () => {
         setMap(map);
         map.resize();
+        mapContainer.current.map = map;
       });
     };
 
     if (!map) initializeMap({ setMap, mapContainer });
   }, [map]);
+
+  console.log('MAP: ', map);
+  useImperativeHandle(ref, () => mapContainer);
 
   return (
     <div ref={el => (mapContainer.current = el)} style={styles}>
@@ -40,6 +43,4 @@ const Map = ({ mapStyle, children }) => {
   );
 };
 
-Map.propTypes = {};
-
-export default Map;
+export default React.memo(React.forwardRef(Map));
