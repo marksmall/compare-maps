@@ -15,7 +15,6 @@ const Map = ({ mapStyle, children }) => {
   const mapContainer = useRef(null);
 
   useEffect(() => {
-    console.log('MAP STYLE: ', mapStyle);
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
     const initializeMap = ({ setMap, mapContainer }) => {
       const map = new mapboxgl.Map({
@@ -26,7 +25,6 @@ const Map = ({ mapStyle, children }) => {
       });
 
       map.on('load', () => {
-        console.log('LOAD MAP STYLE: ', map.getStyle());
         setMap(map);
         map.resize();
       });
